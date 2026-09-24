@@ -128,6 +128,50 @@ def create_subject():
         if conn is not None:
             conn.close()
 
+# 과목 수정
+@app.route('/api/subjects/<int:subject_id>', methods=['PUT'])
+def update_subject(subject_id):
+    conn = None
+    cur = None
+
+    try:
+        data = request.get_json()
+
+        subject_name = data['name']
+
+        conn = get_connection()
+        cur = conn.cursor()
+
+        cur.execute(
+            '''
+            UPDATE subject SET name = %s WHERE id = %s
+            ''',
+            (subject_name, subject_id)
+        )
+
+        conn.commit()
+
+        return jsonify({
+            'message': '과목 수정 성공',
+            'subject': data
+        }), 200
+
+    except pymysql.MySQLError as e:
+        if conn is not None:
+            conn.rollback()
+
+        print(e)
+
+        return jsonify({
+            'message': 'update_subject() DB 처리 실패'
+        }), 500
+    finally:
+        if cur is not None:
+            cur.close()
+
+        if conn is not None:
+            conn.close()
+
 # 과목 삭제
 @app.route('/api/subjects/<int:subject_id>', methods=['DELETE'])
 def delete_subject(subject_id):

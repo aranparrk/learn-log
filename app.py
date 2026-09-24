@@ -152,6 +152,34 @@ def delete_study(study_id):
         'study': study_id
     }), 200
 
+# 공부 목록 수정
+@app.route('/api/studies/<int:study_id>', methods=['PUT'])
+def update_study(study_id):
+    data = request.get_json()
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    subject_id = data['subject_id']
+    study_date = data['study_date']
+    study_minute = data['study_minute']
+    content = data['content']
+
+    cur.execute(
+        '''
+            UPDATE study SET subject_id = %s, study_date = %s, study_minute = %s, content = %s WHERE id = %s
+        ''',
+        (subject_id, study_date, study_minute, content, study_id)
+    )
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return jsonify({
+        'message' : '수정 성공',
+        'study': data
+    }), 200
 
 # 기본 라우트
 @app.route('/')

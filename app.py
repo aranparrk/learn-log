@@ -276,6 +276,61 @@ def update_study(study_id):
         if conn is not None:
             conn.close()
 
+# 과목 삭제 함수
+@app.route('/api/subjects/<int:subject_id>', methods=['DELETE'])
+def delete_subject(subject_id):
+    conn = None
+    cur = None
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+
+        cur.execute(
+            '''
+            SELECT COUNT(*)
+            FROM study
+            WHERE subject_id = %s
+            ''',
+            (subject_id,)
+        )
+        count = cur.fetchone()[0]
+
+        if count > 0:
+            return jsonify({
+                'message' : '사용 중인 과목은 삭제할 수 없습니다.'
+            }), 409
+
+        cur.execute(
+            '''
+                DELETE FROM subject WHERE id = %s
+            ''',
+            (subject_id,)
+        )
+
+        conn.commit()
+
+        return jsonify({
+            'message' : '과목 삭제 성공',
+            'subject': subject_id
+        }), 200
+
+
+    except pymysql.MySQLError as e:
+        if conn is not None:
+            conn.rollback()
+
+        print(e)
+
+        return jsonify({
+            'message': 'delete_subject() DB 처리 실패'
+        }), 500
+    finally:
+        if cur is not None:
+            cur.close()
+
+        if conn is not None:
+            conn.close()
+
 # 기본 라우트
 @app.route('/')
 def index():

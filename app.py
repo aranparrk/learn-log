@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify, request
 import pymysql
 import os
 from dotenv import load_dotenv
@@ -28,6 +28,130 @@ def get_connection():
 
 # Flask 앱 실행
 app = Flask(__name__)
+
+# JSON 한글 표시 설정
+app.json.ensure_ascii = False
+
+# 과목 목록 조회 함수
+@app.route('/api/subjects', methods=['GET'])
+def get_subjects():
+    conn = get_connection()
+    cur = conn.cursor(pymysql.cursors.DictCursor)
+
+    cur.execute('SELECT * FROM subject')
+
+    subjects = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return jsonify(subjects)
+
+# 공부 목록 조회 함수
+@app.route('/api/studies', methods=['GET'])
+def get_studies():
+    conn = get_connection()
+    cur = conn.cursor(pymysql.cursors.DictCursor)
+
+    cur.execute("""
+        SELECT
+            study.id,
+            subject.name AS subject,
+            study.study_date,
+            study.study_minute,
+            study.content
+        FROM study
+        JOIN subject
+            ON study.subject_id = subject.id
+    """)
+
+    studies = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return jsonify(studies)
+
+# 과목 등록 함수
+@app.route('/api/subjects', methods=['POST'])
+def create_subject():
+    data = request.get_json()
+
+    subject_name = data['name']
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        '''
+        INSERT INTO subject(name)
+        VALUES (%s)
+        ''',
+        (subject_name,)
+    )
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return jsonify({
+        'message' : '등록성공',
+        'subject': data
+    }), 201
+
+# 공부 등록 함수
+@app.route('/api/studies', methods=['POST'])
+def create_study():
+    data = request.get_json()
+
+    subject_id = data['subject_id']
+    study_date = data['study_date']
+    study_minute = data['study_minute']
+    content = data['content']
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        '''
+            INSERT INTO study(subject_id, study_date, study_minute, content)
+            VALUES (%s, %s, %s, %s)
+        ''',
+        (subject_id, study_date, study_minute, content)
+    )
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return jsonify({
+        'message': '등록성공',
+        'study': data
+    }), 201
+
+# 공부 목록 삭제
+@app.route('/api/studies/<int:study_id>', methods=['DELETE'])
+def delete_study(study_id):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        '''
+            DELETE FROM study WHERE id = %s
+        ''',
+        (study_id,)
+    )
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return jsonify({
+        'message' : '삭제 성공',
+        'study': study_id
+    }), 200
+
 
 # 기본 라우트
 @app.route('/')

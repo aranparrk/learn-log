@@ -1,0 +1,456 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap");
+
+/* =========================
+   기본 색상
+========================= */
+
+:root {
+  --background: #f3f4f8;
+  --card-background: #ffffff;
+
+  --text: #1f2937;
+  --sub-text: #6b7280;
+
+  --border: #e5e7eb;
+
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+
+  --danger: #dc2626;
+  --danger-hover: #b91c1c;
+
+  --chart-background: #e5e7eb;
+}
+
+/* =========================
+   다크모드 색상
+   나중에 JS로 body에 dark 클래스 추가
+========================= */
+
+body.dark {
+  --background: #111827;
+  --card-background: #1f2937;
+
+  --text: #f9fafb;
+  --sub-text: #9ca3af;
+
+  --border: #374151;
+
+  --primary: #6366f1;
+  --primary-hover: #818cf8;
+
+  --danger: #ef4444;
+  --danger-hover: #f87171;
+
+  --chart-background: #374151;
+}
+
+/* =========================
+   전체 화면
+========================= */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text);
+  margin: 0;
+
+  font-family: "Noto Sans KR", sans-serif;
+  line-height: 1.5;
+}
+
+.app-container {
+  max-width: 1100px;
+
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+/* =========================
+   상단
+========================= */
+
+.header {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 24px;
+}
+
+.header h1 {
+  margin: 0;
+
+  font-size: 32px;
+}
+
+.header p {
+  margin: 6px 0 0;
+
+  color: var(--sub-text);
+}
+
+h1 {
+  font-weight: 700;
+}
+
+h2,
+h3 {
+  font-weight: 600;
+}
+
+/* =========================
+   공통 카드
+========================= */
+
+.dashboard-section,
+.study-section,
+#study-form,
+.subject-section {
+  background-color: var(--card-background);
+
+  border: 1px solid var(--border);
+  border-radius: 16px;
+
+  padding: 24px;
+}
+
+h2 {
+  margin-top: 0;
+
+  font-size: 20px;
+}
+
+h3 {
+  font-size: 16px;
+}
+
+/* =========================
+   대시보드
+========================= */
+
+.dashboard-section {
+  margin-bottom: 20px;
+}
+
+/* 요약 카드 */
+
+.summary-cards {
+  display: flex;
+  gap: 16px;
+
+  margin-top: 20px;
+}
+
+.summary-card {
+  flex: 1;
+
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  padding: 18px;
+}
+
+.summary-card p {
+  margin: 0 0 8px;
+
+  color: var(--sub-text);
+  font-size: 14px;
+}
+
+.summary-card strong {
+  font-size: 26px;
+}
+
+/* =========================
+   과목별 공부시간 그래프
+========================= */
+
+.subject-chart {
+  margin-top: 28px;
+}
+
+.chart-row {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-top: 14px;
+}
+
+.chart-label {
+  width: 70px;
+
+  font-weight: 600;
+}
+
+.chart-track {
+  flex: 1;
+
+  height: 14px;
+
+  background-color: var(--chart-background);
+
+  border-radius: 10px;
+
+  overflow: hidden;
+}
+
+.chart-bar {
+  height: 100%;
+
+  background-color: var(--primary);
+
+  border-radius: 10px;
+}
+
+.chart-value {
+  width: 65px;
+
+  text-align: right;
+
+  color: var(--sub-text);
+
+  font-size: 14px;
+}
+
+/* =========================
+   아래쪽 2열 구조
+========================= */
+
+.content-grid {
+  display: grid;
+
+  grid-template-columns: 2fr 1fr;
+
+  gap: 20px;
+
+  align-items: start;
+}
+
+/* =========================
+   공부 기록
+========================= */
+
+.study-section {
+  min-width: 0;
+}
+
+/* 기록이 많아져도 이 영역만 스크롤 */
+
+.study-list {
+  max-height: 550px;
+
+  overflow-y: auto;
+
+  padding-right: 6px;
+}
+
+/* 공부 기록 하나 */
+
+.study-item {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  padding: 16px;
+
+  margin-bottom: 12px;
+}
+
+.study-item:last-child {
+  margin-bottom: 0;
+}
+
+/* 과목 + 날짜 */
+
+.study-info {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+}
+
+.study-info strong {
+  font-size: 16px;
+}
+
+.study-info span {
+  color: var(--sub-text);
+
+  font-size: 13px;
+}
+
+/* 공부 내용 */
+
+.study-item p {
+  margin: 14px 0;
+
+  color: var(--sub-text);
+}
+
+/* 공부시간 + 버튼 */
+
+.study-footer {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+}
+
+.study-footer > span {
+  font-weight: 600;
+}
+
+/* =========================
+   오른쪽 영역
+========================= */
+
+.side-panel {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 20px;
+}
+
+/* =========================
+   공부 기록 추가
+========================= */
+
+#study-form label {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+
+  margin-bottom: 14px;
+
+  font-size: 14px;
+}
+
+/* =========================
+   입력창
+========================= */
+
+input,
+select {
+  width: 100%;
+
+  background-color: var(--card-background);
+  color: var(--text);
+
+  border: 1px solid var(--border);
+  border-radius: 8px;
+
+  padding: 10px 12px;
+
+  font-family: inherit;
+  font-size: 14px;
+}
+
+/* 입력창 클릭했을 때 */
+
+input:focus,
+select:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+
+/* =========================
+   버튼
+========================= */
+
+button {
+  background-color: var(--primary);
+  color: white;
+
+  border: none;
+  border-radius: 8px;
+
+  padding: 9px 14px;
+
+  font-family: inherit;
+
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--primary-hover);
+}
+
+/* 삭제 버튼 */
+
+.delete-button {
+  background-color: var(--danger);
+}
+
+.delete-button:hover {
+  background-color: var(--danger-hover);
+}
+
+/* =========================
+   과목 관리
+========================= */
+
+.subject-item {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 12px 0;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.subject-item > div {
+  display: flex;
+  gap: 6px;
+}
+
+/* 새 과목 추가 */
+
+.subject-add {
+  display: flex;
+
+  gap: 8px;
+
+  margin-top: 16px;
+}
+
+.subject-add input {
+  flex: 1;
+}
+
+/* =========================
+   공부 기록 스크롤바
+========================= */
+
+.study-list::-webkit-scrollbar {
+  width: 7px;
+}
+
+.study-list::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+
+  border-radius: 10px;
+}
+
+/* =========================
+   copyright
+========================= */
+
+.footer {
+  margin-top: 24px;
+  padding: 20px 0;
+  text-align: center;
+  color: var(--sub-text);
+  font-size: 13px;
+}

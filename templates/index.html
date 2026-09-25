@@ -7,82 +7,200 @@
   </head>
 
   <body>
-    <!-- 상단 -->
-    <header class="header">
-      <h1>LearnLog</h1>
-      <p>나의 공부 기록</p>
-    </header>
-
-    <!-- 메뉴 -->
-    <section class="menu">
-      <button>공부 기록 추가</button>
-      <button>과목 관리</button>
-    </section>
-
-    <!-- 공부 기록 목록 -->
-    <main class="study-section">
-      <h2>공부 기록</h2>
-
-      <!-- 나중에 JS로 DB 데이터를 여기에 넣을 예정 -->
-      <div id="study-list">
-        <!-- 임시 화면 확인용 데이터 -->
+    <div class="app-container">
+      <!-- 상단 -->
+      <header class="header">
         <div>
-          <p>2026-09-25</p>
-          <p>Python</p>
-          <p>90분</p>
-          <p>Python 복습</p>
-
-          <button>수정</button>
-          <button>삭제</button>
+          <h1>LearnLog</h1>
+          <p>나의 공부 기록</p>
         </div>
+
+        <!-- 나중에 JS로 다크모드 기능 연결 -->
+        <button id="theme-toggle">🌙 다크모드</button>
+      </header>
+
+      <!-- 대시보드 -->
+      <section class="dashboard-section">
+        <h2>대시보드</h2>
+
+        <!-- 공부 시간 요약 -->
+        <div class="summary-cards">
+          <div class="summary-card">
+            <p>오늘 공부 시간</p>
+            <strong>90분</strong>
+          </div>
+
+          <div class="summary-card">
+            <p>이번 주 공부 시간</p>
+            <strong>420분</strong>
+          </div>
+
+          <div class="summary-card">
+            <p>총 공부 시간</p>
+            <strong>1,240분</strong>
+          </div>
+        </div>
+
+        <!-- 과목별 공부 시간 -->
+        <div class="subject-chart">
+          <h3>과목별 공부 시간</h3>
+
+          <div class="chart-row">
+            <span class="chart-label">Python</span>
+
+            <div class="chart-track">
+              <div class="chart-bar" style="width: 80%"></div>
+            </div>
+
+            <span class="chart-value">300분</span>
+          </div>
+
+          <div class="chart-row">
+            <span class="chart-label">Flask</span>
+
+            <div class="chart-track">
+              <div class="chart-bar" style="width: 50%"></div>
+            </div>
+
+            <span class="chart-value">180분</span>
+          </div>
+
+          <div class="chart-row">
+            <span class="chart-label">MySQL</span>
+
+            <div class="chart-track">
+              <div class="chart-bar" style="width: 35%"></div>
+            </div>
+
+            <span class="chart-value">120분</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 아래쪽 메인 영역 -->
+      <div class="content-grid">
+        <!-- 왼쪽 : 공부 기록 -->
+        <main class="study-section">
+          <h2>공부 기록</h2>
+
+          <!-- 이 영역만 나중에 스크롤 -->
+          <div id="study-list" class="study-list">
+            <!-- 임시 데이터 -->
+            <div class="study-item">
+              <div class="study-info">
+                <strong>Python</strong>
+                <span>2026-09-25</span>
+              </div>
+
+              <p>Python 복습</p>
+
+              <div class="study-footer">
+                <span>90분</span>
+
+                <div>
+                  <button>수정</button>
+                  <button class="delete-button">삭제</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 화면 확인용 임시 데이터 -->
+            <div class="study-item">
+              <div class="study-info">
+                <strong>Flask</strong>
+                <span>2026-09-24</span>
+              </div>
+
+              <p>Flask API 복습</p>
+
+              <div class="study-footer">
+                <span>60분</span>
+
+                <div>
+                  <button>수정</button>
+                  <button class="delete-button">삭제</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="study-item">
+              <div class="study-info">
+                <strong>MySQL</strong>
+                <span>2026-09-23</span>
+              </div>
+
+              <p>JOIN과 GROUP BY 공부</p>
+
+              <div class="study-footer">
+                <span>120분</span>
+
+                <div>
+                  <button>수정</button>
+                  <button class="delete-button">삭제</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <!-- 오른쪽 -->
+        <aside class="side-panel">
+          <!-- 공부 기록 추가 -->
+          <section id="study-form">
+            <h2>공부 기록 추가</h2>
+
+            <label>
+              날짜
+              <input type="date" />
+            </label>
+
+            <label>
+              과목
+              <select>
+                <option>Python</option>
+                <option>MySQL</option>
+                <option>Flask</option>
+              </select>
+            </label>
+
+            <label>
+              공부 시간
+              <input type="number" />
+            </label>
+
+            <label>
+              내용
+              <input type="text" />
+            </label>
+
+            <button>등록</button>
+          </section>
+
+          <!-- 과목 관리 -->
+          <section class="subject-section" id="subject-management">
+            <h2>과목 관리</h2>
+
+            <div class="subject-item">
+              <span>Python</span>
+
+              <div>
+                <button>수정</button>
+                <button class="delete-button">삭제</button>
+              </div>
+            </div>
+
+            <div class="subject-add">
+              <input type="text" placeholder="새 과목" />
+
+              <button>추가</button>
+            </div>
+          </section>
+        </aside>
       </div>
-    </main>
+    </div>
 
-    <!-- 공부 기록 등록 영역 -->
-    <section id="study-form">
-      <h2>공부 기록 추가</h2>
-
-      <label>
-        날짜
-        <input type="date" />
-      </label>
-
-      <label>
-        과목
-        <select>
-          <option>Python</option>
-          <option>MySQL</option>
-          <option>Flask</option>
-        </select>
-      </label>
-
-      <label>
-        공부 시간
-        <input type="number" />
-      </label>
-
-      <label>
-        내용
-        <input type="text" />
-      </label>
-
-      <button>등록</button>
-    </section>
-
-    <!-- 과목 관리 영역 -->
-    <section class="subject-section" id="subject-management">
-      <h2>과목 관리</h2>
-
-      <div>
-        <span>Python</span>
-        <button>수정</button>
-        <button>삭제</button>
-      </div>
-
-      <div>
-        <input type="text" placeholder="새 과목" />
-        <button>추가</button>
-      </div>
-    </section>
+    <footer class="footer">
+      <p>© 2026 LearnLog by aranparrk.</p>
+    </footer>
   </body>
 </html>

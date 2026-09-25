@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>LearnLog</title>
+  </head>
+
+  <body>
+    <!-- 상단 -->
+    <header>
+      <h1>LearnLog</h1>
+      <p>나의 공부 기록</p>
+    </header>
+
+    <!-- 메뉴 -->
+    <section>
+      <button>공부 기록 추가</button>
+      <button>과목 관리</button>
+    </section>
+
+    <!-- 공부 기록 목록 -->
+    <main>
+      <h2>공부 기록</h2>
+
+      <!-- 나중에 JS로 DB 데이터를 여기에 넣을 예정 -->
+      <div id="study-list">
+        <!-- 임시 화면 확인용 데이터 -->
+        <div>
+          <p>2026-09-25</p>
+          <p>Python</p>
+          <p>90분</p>
+          <p>Python 복습</p>
+
+          <button>수정</button>
+          <button>삭제</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- 공부 기록 등록 영역 -->
+    <section id="study-form">
+      <h2>공부 기록 추가</h2>
+
+      <label>
+        날짜
+        <input type="date" />
+      </label>
+
+      <label>
+        과목
+        <select>
+          <option>Python</option>
+          <option>MySQL</option>
+          <option>Flask</option>
+        </select>
+      </label>
+
+      <label>
+        공부 시간
+        <input type="number" />
+      </label>
+
+      <label>
+        내용
+        <input type="text" />
+      </label>
+
+      <button>등록</button>
+    </section>
+
+    <!-- 과목 관리 영역 -->
+    <section id="subject-management">
+      <h2>과목 관리</h2>
+
+      <div>
+        <span>Python</span>
+        <button>수정</button>
+        <button>삭제</button>
+      </div>
+
+      <div>
+        <input type="text" placeholder="새 과목" />
+        <button>추가</button>
+      </div>
+    </section>
+  </body>
+</html>

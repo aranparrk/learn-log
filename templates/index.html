@@ -3,23 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <title>LearnLog</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
   </head>
 
   <body>
     <!-- 상단 -->
-    <header>
+    <header class="header">
       <h1>LearnLog</h1>
       <p>나의 공부 기록</p>
     </header>
 
     <!-- 메뉴 -->
-    <section>
+    <section class="menu">
       <button>공부 기록 추가</button>
       <button>과목 관리</button>
     </section>
 
     <!-- 공부 기록 목록 -->
-    <main>
+    <main class="study-section">
       <h2>공부 기록</h2>
 
       <!-- 나중에 JS로 DB 데이터를 여기에 넣을 예정 -->
@@ -69,7 +70,7 @@
     </section>
 
     <!-- 과목 관리 영역 -->
-    <section id="subject-management">
+    <section class="subject-section" id="subject-management">
       <h2>과목 관리</h2>
 
       <div>

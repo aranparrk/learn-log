@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 import pymysql
 import os
 from dotenv import load_dotenv
@@ -689,7 +689,7 @@ def delete_study(study_id):
 
 @app.route('/')
 def index():
-    return 'LearnLog 서버 실행 성공!'
+    return render_template('index.html')
 
 
 # 현재 파일을 직접 실행했을 때 Flask 서버 시작

@@ -143,6 +143,18 @@ def update_subject(subject_id):
         cur = conn.cursor()
 
         cur.execute(
+            'SELECT * FROM subject WHERE id = %s',
+            (subject_id,)
+        )
+
+        subject = cur.fetchone()
+
+        if subject is None:
+            return jsonify({
+                'message' : '해당 과목이 없습니다.'
+            }), 404
+
+        cur.execute(
             '''
             UPDATE subject SET name = %s WHERE id = %s
             ''',
@@ -181,6 +193,18 @@ def delete_subject(subject_id):
     try:
         conn = get_connection()
         cur = conn.cursor()
+
+        cur.execute(
+            'SELECT * FROM subject WHERE id = %s',
+            (subject_id,)
+        )
+
+        subject = cur.fetchone()
+
+        if subject is None:
+            return jsonify({
+                'message' : '해당 과목이 없습니다.'
+            }), 404
 
         # 해당 과목을 사용하고 있는 공부 기록 개수 확인
         cur.execute(
@@ -361,6 +385,18 @@ def update_study(study_id):
         conn = get_connection()
         cur = conn.cursor()
 
+        cur.execute(
+            'SELECT * FROM study WHERE id = %s',
+            (study_id,)
+        )
+
+        study = cur.fetchone()
+
+        if study is None:
+            return jsonify({
+                'message' : '해당 공부기록이 없습니다.'
+            }), 404
+
         # URL로 전달받은 study_id의 공부 기록 수정
         cur.execute(
             '''
@@ -414,6 +450,18 @@ def delete_study(study_id):
     try:
         conn = get_connection()
         cur = conn.cursor()
+
+        cur.execute(
+            'SELECT * FROM study WHERE id = %s',
+            (study_id,)
+        )
+
+        study = cur.fetchone()
+
+        if study is None:
+            return jsonify({
+                'message' : '해당 공부기록이 없습니다.'
+            }), 404
 
         # URL로 전달받은 study_id의 공부 기록 삭제
         cur.execute(

@@ -128,20 +128,15 @@
           <section class="subject-section" id="subject-management">
             <h2>과목 관리</h2>
 
-            <div class="subject-item">
-              <span>Python</span>
-
-              <div>
-                <button>수정</button>
-
-                <button class="delete-button">삭제</button>
-              </div>
-            </div>
+            <!-- JS가 DB 과목 목록을 여기에 출력 -->
+            <div id="subject-list"></div>
 
             <div class="subject-add">
-              <input type="text" placeholder="새 과목" />
+              <input id="subject-name" type="text" placeholder="새 과목" />
 
-              <button>추가</button>
+              <button id="subject-submit">추가</button>
+
+              <button id="subject-cancel" type="button" hidden>취소</button>
             </div>
           </section>
         </aside>

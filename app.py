@@ -370,12 +370,13 @@ def get_studies():
         # 조회 결과를 딕셔너리 형태로 반환
         cur = conn.cursor(pymysql.cursors.DictCursor)
 
-        # study의 subject_id와 subject의 id를 연결해서
-        # 과목 id 대신 과목 이름을 반환
+        # study와 subject를 JOIN해서
+        # 과목 id와 과목 이름을 함께 반환
         cur.execute(
             '''
             SELECT
                 study.id,
+                study.subject_id,
                 subject.name AS subject,
                 study.study_date,
                 study.study_minute,

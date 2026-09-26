@@ -383,6 +383,7 @@ def get_studies():
             FROM study
             JOIN subject
                 ON study.subject_id = subject.id
+            ORDER BY study.study_date DESC
             '''
         )
 

@@ -27,17 +27,20 @@
         <div class="summary-cards">
           <div class="summary-card">
             <p>오늘 공부 시간</p>
-            <strong>90분</strong>
+
+            <strong id="today-study-time"> 0분 </strong>
           </div>
 
           <div class="summary-card">
             <p>이번 주 공부 시간</p>
-            <strong>420분</strong>
+
+            <strong id="week-study-time"> 0분 </strong>
           </div>
 
           <div class="summary-card">
             <p>총 공부 시간</p>
-            <strong>1,240분</strong>
+
+            <strong id="total-study-time"> 0분 </strong>
           </div>
         </div>
 
@@ -45,35 +48,8 @@
         <div class="subject-chart">
           <h3>과목별 공부 시간</h3>
 
-          <div class="chart-row">
-            <span class="chart-label"> Python </span>
-
-            <div class="chart-track">
-              <div class="chart-bar" style="width: 80%"></div>
-            </div>
-
-            <span class="chart-value"> 300분 </span>
-          </div>
-
-          <div class="chart-row">
-            <span class="chart-label"> Flask </span>
-
-            <div class="chart-track">
-              <div class="chart-bar" style="width: 50%"></div>
-            </div>
-
-            <span class="chart-value"> 180분 </span>
-          </div>
-
-          <div class="chart-row">
-            <span class="chart-label"> MySQL </span>
-
-            <div class="chart-track">
-              <div class="chart-bar" style="width: 35%"></div>
-            </div>
-
-            <span class="chart-value"> 120분 </span>
-          </div>
+          <!-- JS가 DB 과목별 공부 시간을 여기에 출력 -->
+          <div id="subject-chart"></div>
         </div>
       </section>
 
@@ -102,11 +78,7 @@
             <label>
               과목
 
-              <select id="study-subject">
-                <option>Python</option>
-                <option>MySQL</option>
-                <option>Flask</option>
-              </select>
+              <select id="study-subject"></select>
             </label>
 
             <label>

@@ -20,6 +20,15 @@ const subjectName = document.getElementById("subject-name");
 const subjectSubmit = document.getElementById("subject-submit");
 const subjectCancel = document.getElementById("subject-cancel");
 
+// 대시보드
+const todayStudyTime = document.getElementById("today-study-time");
+
+const weekStudyTime = document.getElementById("week-study-time");
+
+const totalStudyTime = document.getElementById("total-study-time");
+
+const subjectChart = document.getElementById("subject-chart");
+
 // =========================================================
 // 수정 상태 저장
 // =========================================================
@@ -51,7 +60,6 @@ function loadStudies() {
     })
 
     .then(function (data) {
-      // 기존 화면 비우기
       studyList.innerHTML = "";
 
       // 공부 기록이 없을 경우
@@ -81,7 +89,6 @@ function loadStudies() {
 
         const formattedDate = `${year}-${month}-${day}`;
 
-        // 공부 기록 출력
         studyList.innerHTML += `
                     <div class="study-item">
 
@@ -155,8 +162,9 @@ function loadStudies() {
             .then(function (data) {
               console.log(data);
 
-              // 삭제 후 목록 다시 불러오기
               loadStudies();
+
+              loadDashboard();
             });
         });
       }
@@ -176,7 +184,6 @@ function loadStudies() {
           // 수정 상태로 변경
           editingStudyId = studyId;
 
-          // 버튼 문구 변경
           studySubmit.textContent = "수정 저장";
 
           // 클릭한 공부 기록 찾기
@@ -194,7 +201,6 @@ function loadStudies() {
 
               const formattedDate = `${year}-${month}-${day}`;
 
-              // 기존 값을 입력폼에 넣기
               studyDate.value = formattedDate;
 
               studySubject.value = study.subject_id;
@@ -222,10 +228,8 @@ function resetStudyForm() {
 
   studyContent.value = "";
 
-  // 수정 상태 종료
   editingStudyId = null;
 
-  // 버튼 다시 등록으로 변경
   studySubmit.textContent = "등록";
 }
 
@@ -267,6 +271,8 @@ studySubmit.addEventListener("click", function () {
 
         loadStudies();
 
+        loadDashboard();
+
         resetStudyForm();
       });
   }
@@ -292,6 +298,8 @@ studySubmit.addEventListener("click", function () {
         console.log(data);
 
         loadStudies();
+
+        loadDashboard();
 
         resetStudyForm();
       });
@@ -320,10 +328,8 @@ function loadSubjects() {
 
         const option = document.createElement("option");
 
-        // 실제 전송값
         option.value = subject.id;
 
-        // 화면 표시값
         option.textContent = subject.name;
 
         studySubject.appendChild(option);
@@ -351,7 +357,6 @@ function loadSubjects() {
                             ${subject.name}
                         </span>
 
-
                         <div>
 
                             <button
@@ -360,7 +365,6 @@ function loadSubjects() {
                             >
                                 수정
                             </button>
-
 
                             <button
                                 class="delete-button subject-delete-button"
@@ -393,7 +397,6 @@ function loadSubjects() {
 
           subjectCancel.hidden = false;
 
-          // 수정할 과목 찾기
           for (let j = 0; j < data.length; j++) {
             const subject = data[j];
 
@@ -422,8 +425,6 @@ function loadSubjects() {
             method: "DELETE",
           })
             .then(function (response) {
-              // 성공 여부와
-              // JSON 데이터를 같이 넘김
               return response.json().then(function (data) {
                 return {
                   ok: response.ok,
@@ -434,8 +435,6 @@ function loadSubjects() {
             })
 
             .then(function (result) {
-              // 삭제 실패
-              // 예: 사용 중인 과목
               if (!result.ok) {
                 alert(result.data.message);
 
@@ -444,8 +443,11 @@ function loadSubjects() {
 
               console.log(result.data);
 
-              // 과목 목록 다시 불러오기
               loadSubjects();
+
+              loadDashboard();
+
+              resetSubjectForm();
             });
         });
       }
@@ -473,7 +475,6 @@ function resetSubjectForm() {
 subjectSubmit.addEventListener("click", function () {
   const name = subjectName.value.trim();
 
-  // 빈 값 방지
   if (name === "") {
     alert("과목명을 입력해주세요.");
 
@@ -509,7 +510,6 @@ subjectSubmit.addEventListener("click", function () {
       })
 
       .then(function (result) {
-        // 중복 과목 등 실패
         if (!result.ok) {
           alert(result.data.message);
 
@@ -521,6 +521,8 @@ subjectSubmit.addEventListener("click", function () {
         resetSubjectForm();
 
         loadSubjects();
+
+        loadDashboard();
       });
   }
 
@@ -558,12 +560,11 @@ subjectSubmit.addEventListener("click", function () {
 
         resetSubjectForm();
 
-        // 과목 select / 관리 목록 갱신
         loadSubjects();
 
-        // 공부 기록에도
-        // 변경된 과목명 반영
         loadStudies();
+
+        loadDashboard();
       });
   }
 });
@@ -577,9 +578,95 @@ subjectCancel.addEventListener("click", function () {
 });
 
 // =========================================================
+// 대시보드 조회
+// =========================================================
+
+function loadDashboard() {
+  fetch("/api/dashboard")
+    .then(function (response) {
+      return response.json();
+    })
+
+    .then(function (data) {
+      // ---------------------------------------------
+      // 공부 시간 카드
+      // ---------------------------------------------
+
+      todayStudyTime.textContent = `${data.today}분`;
+
+      weekStudyTime.textContent = `${data.week}분`;
+
+      totalStudyTime.textContent = `${data.total}분`;
+
+      // ---------------------------------------------
+      // 과목별 그래프 초기화
+      // ---------------------------------------------
+
+      subjectChart.innerHTML = "";
+
+      // ---------------------------------------------
+      // 가장 공부 시간이 긴 과목 찾기
+      // ---------------------------------------------
+
+      let maxMinute = 0;
+
+      for (let i = 0; i < data.subjects.length; i++) {
+        // MySQL 결과가 문자열일 수 있어서
+        // 숫자로 변환
+        const minute = Number(data.subjects[i].study_minute);
+
+        if (minute > maxMinute) {
+          maxMinute = minute;
+        }
+      }
+
+      // ---------------------------------------------
+      // 과목별 그래프 생성
+      // ---------------------------------------------
+
+      for (let i = 0; i < data.subjects.length; i++) {
+        const subject = data.subjects[i];
+
+        const minute = Number(subject.study_minute);
+
+        let width = 0;
+
+        if (maxMinute > 0) {
+          width = (minute / maxMinute) * 100;
+        }
+
+        subjectChart.innerHTML += `
+                    <div class="chart-row">
+
+                        <span class="chart-label">
+                            ${subject.name}
+                        </span>
+
+                        <div class="chart-track">
+
+                            <div
+                                class="chart-bar"
+                                style="width: ${width}%"
+                            ></div>
+
+                        </div>
+
+                        <span class="chart-value">
+                            ${minute}분
+                        </span>
+
+                    </div>
+                `;
+      }
+    });
+}
+
+// =========================================================
 // 페이지 처음 열렸을 때 실행
 // =========================================================
 
 loadStudies();
 
 loadSubjects();
+
+loadDashboard();

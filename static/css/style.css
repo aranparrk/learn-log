@@ -24,7 +24,6 @@
 
 /* =========================
    다크모드 색상
-   나중에 JS로 body에 dark 클래스 추가
 ========================= */
 
 body.dark {
@@ -56,6 +55,7 @@ body.dark {
 body {
   background-color: var(--background);
   color: var(--text);
+
   margin: 0;
 
   font-family: "Noto Sans KR", sans-serif;
@@ -141,6 +141,7 @@ h3 {
 
 .summary-cards {
   display: flex;
+
   gap: 16px;
 
   margin-top: 20px;
@@ -159,6 +160,7 @@ h3 {
   margin: 0 0 8px;
 
   color: var(--sub-text);
+
   font-size: 14px;
 }
 
@@ -174,8 +176,14 @@ h3 {
   margin-top: 28px;
 }
 
+#subject-chart {
+  width: 100%;
+}
+
 .chart-row {
-  display: flex;
+  display: grid;
+
+  grid-template-columns: 70px minmax(0, 1fr) 65px;
 
   align-items: center;
 
@@ -185,14 +193,11 @@ h3 {
 }
 
 .chart-label {
-  width: 70px;
-
   font-weight: 600;
 }
 
 .chart-track {
-  flex: 1;
-
+  width: 100%;
   height: 14px;
 
   background-color: var(--chart-background);
@@ -205,14 +210,16 @@ h3 {
 .chart-bar {
   height: 100%;
 
+  max-width: 100%;
+
   background-color: var(--primary);
 
   border-radius: 10px;
+
+  transition: width 0.3s ease;
 }
 
 .chart-value {
-  width: 65px;
-
   text-align: right;
 
   color: var(--sub-text);
@@ -412,6 +419,7 @@ button:hover {
 
 .subject-item > div {
   display: flex;
+
   gap: 6px;
 }
 
@@ -449,8 +457,12 @@ button:hover {
 
 .footer {
   margin-top: 24px;
+
   padding: 20px 0;
+
   text-align: center;
+
   color: var(--sub-text);
+
   font-size: 13px;
 }

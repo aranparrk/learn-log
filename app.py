@@ -684,6 +684,93 @@ def delete_study(study_id):
         if conn is not None:
             conn.close()
 
+@app.route('/api/dashboard', methods=['GET'])
+def get_dashboard():
+    conn = None
+    cur = None
+
+    try:
+        conn = get_connection()
+        cur = conn.cursor(pymysql.cursors.DictCursor)
+
+        # 오늘 공부 시간
+        cur.execute(
+            '''
+            SELECT COALESCE(SUM(study_minute), 0) AS today
+            FROM study
+            WHERE study_date = CURDATE()
+            '''
+        )
+
+        today = cur.fetchone()['today']
+
+
+        # 이번 주 공부 시간
+        cur.execute(
+            '''
+            SELECT COALESCE(SUM(study_minute), 0) AS week
+            FROM study
+            WHERE YEARWEEK(study_date, 1)
+                = YEARWEEK(CURDATE(), 1)
+            '''
+        )
+
+        week = cur.fetchone()['week']
+
+
+        # 전체 공부 시간
+        cur.execute(
+            '''
+            SELECT COALESCE(SUM(study_minute), 0) AS total
+            FROM study
+            '''
+        )
+
+        total = cur.fetchone()['total']
+
+
+        # 과목별 공부 시간
+        cur.execute(
+            '''
+            SELECT
+                subject.name,
+                COALESCE(SUM(study.study_minute), 0) AS study_minute
+            FROM subject
+            LEFT JOIN study
+                ON subject.id = study.subject_id
+            GROUP BY subject.id, subject.name
+            ORDER BY study_minute DESC
+            '''
+        )
+
+        subjects = cur.fetchall()
+
+
+        return jsonify({
+            'today': today,
+            'week': week,
+            'total': total,
+            'subjects': subjects
+        }), 200
+
+
+    except pymysql.MySQLError as e:
+
+        print(e)
+
+        return jsonify({
+            'message': '대시보드 조회 실패'
+        }), 500
+
+
+    finally:
+
+        if cur:
+            cur.close()
+
+        if conn:
+            conn.close()
+
 
 # =========================================================
 # 기본 페이지

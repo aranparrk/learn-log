@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>LearnLog</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+
+  <body>
+    <div class="app-container">
+      <!-- 상단 -->
+      <header class="header">
+        <div>
+          <h1>LearnLog</h1>
+          <p>나의 공부 기록</p>
+        </div>
+
+        <button id="theme-toggle">🌙 다크모드</button>
+      </header>
+
+      <!-- 대시보드 -->
+      <section class="dashboard-section">
+        <h2>대시보드</h2>
+
+        <!-- 공부 시간 요약 -->
+        <div class="summary-cards">
+          <div class="summary-card">
+            <p>오늘 공부 시간</p>
+
+            <strong id="today-study-time"> 0분 </strong>
+          </div>
+
+          <div class="summary-card">
+            <p>이번 주 공부 시간</p>
+
+            <strong id="week-study-time"> 0분 </strong>
+          </div>
+
+          <div class="summary-card">
+            <p>총 공부 시간</p>
+
+            <strong id="total-study-time"> 0분 </strong>
+          </div>
+        </div>
+
+        <!-- 과목별 공부 시간 -->
+        <div class="subject-chart">
+          <h3>과목별 공부 시간</h3>
+
+          <!-- JS가 DB 과목별 공부 시간을 여기에 출력 -->
+          <div id="subject-chart"></div>
+        </div>
+      </section>
+
+      <!-- 아래쪽 메인 영역 -->
+      <div class="content-grid">
+        <!-- 왼쪽 : 공부 기록 -->
+        <main class="study-section">
+          <h2>공부 기록</h2>
+
+          <!-- JS가 DB 공부 기록을 여기에 넣음 -->
+          <div id="study-list" class="study-list"></div>
+        </main>
+
+        <!-- 오른쪽 -->
+        <aside class="side-panel">
+          <!-- 공부 기록 추가 -->
+          <section id="study-form">
+            <h2>공부 기록 추가</h2>
+
+            <label>
+              날짜
+
+              <input id="study-date" type="date" />
+            </label>
+
+            <label>
+              과목
+
+              <select id="study-subject"></select>
+            </label>
+
+            <label>
+              공부 시간
+
+              <input id="study-minute" type="number" />
+            </label>
+
+            <label>
+              내용
+
+              <input id="study-content" type="text" />
+            </label>
+
+            <button id="study-submit">등록</button>
+          </section>
+
+          <!-- 과목 관리 -->
+          <section class="subject-section" id="subject-management">
+            <h2>과목 관리</h2>
+
+            <!-- JS가 DB 과목 목록을 여기에 출력 -->
+            <div id="subject-list"></div>
+
+            <div class="subject-add">
+              <input id="subject-name" type="text" placeholder="새 과목" />
+
+              <button id="subject-submit">추가</button>
+
+              <button id="subject-cancel" type="button" hidden>취소</button>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <p>© 2026 LearnLog by aranparrk.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  </body>
+</html>

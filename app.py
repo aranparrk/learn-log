@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 import pymysql
 import os
 from dotenv import load_dotenv
@@ -370,12 +370,13 @@ def get_studies():
         # 조회 결과를 딕셔너리 형태로 반환
         cur = conn.cursor(pymysql.cursors.DictCursor)
 
-        # study의 subject_id와 subject의 id를 연결해서
-        # 과목 id 대신 과목 이름을 반환
+        # study와 subject를 JOIN해서
+        # 과목 id와 과목 이름을 함께 반환
         cur.execute(
             '''
             SELECT
                 study.id,
+                study.subject_id,
                 subject.name AS subject,
                 study.study_date,
                 study.study_minute,
@@ -383,6 +384,7 @@ def get_studies():
             FROM study
             JOIN subject
                 ON study.subject_id = subject.id
+            ORDER BY study.study_date DESC, study.created_at DESC
             '''
         )
 
@@ -682,6 +684,93 @@ def delete_study(study_id):
         if conn is not None:
             conn.close()
 
+@app.route('/api/dashboard', methods=['GET'])
+def get_dashboard():
+    conn = None
+    cur = None
+
+    try:
+        conn = get_connection()
+        cur = conn.cursor(pymysql.cursors.DictCursor)
+
+        # 오늘 공부 시간
+        cur.execute(
+            '''
+            SELECT COALESCE(SUM(study_minute), 0) AS today
+            FROM study
+            WHERE study_date = CURDATE()
+            '''
+        )
+
+        today = cur.fetchone()['today']
+
+
+        # 이번 주 공부 시간
+        cur.execute(
+            '''
+            SELECT COALESCE(SUM(study_minute), 0) AS week
+            FROM study
+            WHERE YEARWEEK(study_date, 1)
+                = YEARWEEK(CURDATE(), 1)
+            '''
+        )
+
+        week = cur.fetchone()['week']
+
+
+        # 전체 공부 시간
+        cur.execute(
+            '''
+            SELECT COALESCE(SUM(study_minute), 0) AS total
+            FROM study
+            '''
+        )
+
+        total = cur.fetchone()['total']
+
+
+        # 과목별 공부 시간
+        cur.execute(
+            '''
+            SELECT
+                subject.name,
+                COALESCE(SUM(study.study_minute), 0) AS study_minute
+            FROM subject
+            LEFT JOIN study
+                ON subject.id = study.subject_id
+            GROUP BY subject.id, subject.name
+            ORDER BY study_minute DESC
+            '''
+        )
+
+        subjects = cur.fetchall()
+
+
+        return jsonify({
+            'today': today,
+            'week': week,
+            'total': total,
+            'subjects': subjects
+        }), 200
+
+
+    except pymysql.MySQLError as e:
+
+        print(e)
+
+        return jsonify({
+            'message': '대시보드 조회 실패'
+        }), 500
+
+
+    finally:
+
+        if cur:
+            cur.close()
+
+        if conn:
+            conn.close()
+
 
 # =========================================================
 # 기본 페이지
@@ -689,7 +778,7 @@ def delete_study(study_id):
 
 @app.route('/')
 def index():
-    return 'LearnLog 서버 실행 성공!'
+    return render_template('index.html')
 
 
 # 현재 파일을 직접 실행했을 때 Flask 서버 시작
